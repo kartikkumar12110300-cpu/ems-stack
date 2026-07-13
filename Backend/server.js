@@ -11,6 +11,8 @@ const employeeRoutes = require("./routes/employeeRoutes");
 const loggerMiddleware = require("./middleware/loggerMiddleware");
 
 const cors = require("cors");
+const port = process.env.PORT || 4500;
+const mongoUri = process.env.MONGODB_URI;
 
 // Middleware
 
@@ -30,13 +32,17 @@ app.get("/", (req, res) => {
 
 });
 
-mongoose.connect("mongodb+srv://Kartik:Kartik2003@cluster.9qm9pzq.mongodb.net/ems").then(()=>{
+if (!mongoUri) {
+  throw new Error("MONGODB_URI environment variable is required");
+}
+
+mongoose.connect(mongoUri).then(()=>{
   console.log("Connected to MongoDB");
 })
 .catch((err)=>{
   console.log("err");
   })
-app.listen(4500, () => {
+app.listen(port, () => {
 
   console.log("Server Running on Port 4500");
 
